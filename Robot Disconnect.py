@@ -20,26 +20,16 @@ first_thread = thread_run(updating, loop=True)
 #    set_tool(type)                         # 툴무게 변경(충전건 잡았을경우, type = chademo, combo, normal)
 #    vs_disconnect()                        # 비젼 연결 해제                  
 
-def Vision_result():                        # 비젼으로부터 측정결과 정보 가져오는 명령어
-    cnt, result = vs_result()
-    for i in range(cnt):
-        x = result[i][0]                    # x=x좌표
-        y = result[i][1]                    # y=y좌표
-        t = result[i][2]                    # t=회전값
-        tp_popup("x={0},y={1},t={2}".format(result[i][0],result[i][1],result[i][2]),DR_PM_MESSAGE)      
+#def Vision_result():                        # 비젼으로부터 측정결과 정보 가져오는 명령어
+#    cnt, result = vs_result()
+#    for i in range(cnt):
+#        x = result[i][0]                    # x=x좌표
+#        y = result[i][1]                    # y=y좌표
+#        t = result[i][2]                    # t=회전값
+#        tp_popup("x={0},y={1},t={2}".format(result[i][0],result[i][1],result[i][2]),DR_PM_MESSAGE)      
 
 # 충전 종료 데이터를 받음(PTOR),로봇 상태 보냄(포지션 위치나 동작 여부 확인)(RTOP)
-def updating():
-    robot_communication.get_PTOR_data()
-    robot_communication.decode_and_split()
-    robot_communication.communication_check()
-    robot_communication.command_check()   # Done without udpates from 'Operation'
-    robot_communication.position_check()  # Done without udpates from 'Operation'
-    robot_communication.IO_status_check()
-    #robot_communication.charging_type() # 이건 어떡할건지.... 로봇이 무슨 타입인지 그 전 프로세스가 없으면 확인할 수가 없음. 근데 어떤 플로우로 확인할건지?
-    robot_communication.emergency_pushed_check()
-    robot_communication.merge_and_encode()
-    robot_communication.send_RTOP_data()
+
 
 plc_socket()                                # plc 통신 연결
 updating()                                  # plc 통신 하여 데이터 받음
@@ -58,14 +48,28 @@ set_tool(type)                              # 툴 무게 변경(충전건 놓았
 task_compliance_ctrl()                      # 순응제어 명령 건이 충전구에서 움직이는 동안 멈추지 않도록
 release_compliance_ctrl()                   
 set_stiffnessx([3000,3000,3000,200,200,200], time=3)                            #안에 있는 숫자는 기본값 차후 수정요망
-set_desired_forec([0,0,-200,0,0,0],[0,0,1,0,0,0],time=1, DR_FC_MOD_REL)         #Fd=[0,0,0,0,0,0] 기본값 힘성분 3개, 모멘트 성분 3개, dir=[0,0,0,0,0,0] 기본값 1이면 해당방향 힘제어 0이면 해당 방향 compliance 제어, time=힘증가시키는데 소요 시간, 
+set_desired_forec([0,0,-200,0,0,0],[0,0,1,0,0,0],time=1,DR_FC_MOD_REL)         #Fd=[0,0,0,0,0,0] 기본값 힘성분 3개, 모멘트 성분 3개, dir=[0,0,0,0,0,0] 기본값 1이면 해당방향 힘제어 0이면 해당 방향 compliance 제어, time=힘증가시키는데 소요 시간, 
 release_force(1)                            # 충전건 집고 빠지는 동작(포스 이용,티칭) 
 
 
 set_ref_coord(DR_BASE)                      # 로봇 좌표계를 베이스 좌표계로 변경
                                             # 충전건을 다시 거치대 위치로 이동(티칭)
                                             # 충전건 클램프 off(티칭)
-set_tool(type)                              # 툴 무게 변경(충전건 놓았을경우, type = chademo, combo, normal)
+set_tool(type)                              # 툴 무게 변경(충전건 놓았을경우(normal), type = chademo, combo, normal)
                                             # 충전건 거치 위치에서 빠지고 홈포지션으로 이동.(티칭)
                                             # 충전 종료 완료했다는 데이터 보냄(RTOP)
 
+
+
+
+
+
+
+
+def get_current_position(self):
+        self.currentPos, _ = get_current_posx(ref=DR_BASE)
+        if self.currentPos == posx(self.home_position):
+            self.outData = 1
+
+        elif self.currentPos == posx(self.wait_position):
+            self.outData = 1

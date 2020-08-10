@@ -44,7 +44,7 @@ if robot_communication.PTOR_data[1] == '0x04': # 충전 종료 데이터 받음(
     # 충전건 거치 위치에서 빠지고 홈포지션으로 이동.(티칭)
                                             # 충전 종료 완료했다는 데이터 보냄(RTOP)
 
-elif robot_communication.PTOR_data[1] != '0x04':
+else robot_communication.PTOR_data[1] != '0x04':
     print("Fail to Robot Disconnect!")
 # def Vision_Work():
 #    # 비전 데이터 받아서 움직임(비젼 데이터를 받는 명령어,비젼 데이터를 통해 움직이는 명령어, 위치 도작했다는 신호 받음)

@@ -3,22 +3,28 @@ from test_running import robot_communication
 def tool_type(self):
     if self.robot_communication.PTOR_data[5] == '0x20':
         self.set_tool(chademo)
-        self.
+        self.robot_communication.RTOP_data[5] = '0x08'
     elif self.robot_communication.PTOR_data[5] == '0x10':
         self.set_tool(combo)
-    else: print("Fail to Charging type! ")
+        self.robot_communication.RTOP_data[5] = '0x04'
+    else: print("Fail to Charging type!")
 
 def disconnnet_type(self):
     if self.robot_communication.PTOR_data[5] == '0x20':
         self.sub_program_run(Chademo_Disconnect)
+        self.robot_communication.RTOP_data[5] = '0x20'
     elif self.robot_communication.PTOR_data[5] == '0x10':
         self.sub_program_run(combo_Disconnect)
-    else: print("Fail to Disconnect type! ")
+        self.robot_communication.RTOP_data[5] = '0x10'
+    else: print("Fail to Disconnect type!")
 
 
-if robot_communication.PTOR_data[1] == '0x04': # 충전 종료 데이터 받음(PTOR)
+if self.robot_communication.PTOR_data[3] == '0x04': # 충전 종료 데이터 받음(PTOR)
+    self.robot_communication.RTOP_data[3] = '0x04'
+    self.robot_communication.RTOP_data[5] == '0x'
+        
 
-                                            # 충전 종료 동작 했다는 데이터 보냄
+                # 충전 종료 동작 했다는 데이터 보냄
     # 티칭으로 충전건 앞까지 이동(티칭)
     set_ref_coord(DR_TOOL)                      # 로봇 좌표계를 툴 좌표계로 변경
     vision_socket()                             # vision 통신 연결
@@ -27,6 +33,7 @@ if robot_communication.PTOR_data[1] == '0x04': # 충전 종료 데이터 받음(
                                             # 충전건 잡는위치까지 비젼데이터로 이동
     if robot_communication.PTOR_data[0] == '0x04':      # 클램프 데이터를 받음
         set_tool_digital_output(1, ON)          # 클램프 ON
+        robot_communication.RTOP_data[1] = '0x04'
     wait(1.0)
     tool_type()                                 # tool 타입 별 툴 무게 설정
     wait(0.5)
@@ -44,8 +51,12 @@ if robot_communication.PTOR_data[1] == '0x04': # 충전 종료 데이터 받음(
     # 충전건 거치 위치에서 빠지고 홈포지션으로 이동.(티칭)
                                             # 충전 종료 완료했다는 데이터 보냄(RTOP)
 
-else robot_communication.PTOR_data[1] != '0x04':
-    print("Fail to Robot Disconnect!")
+else :
+     print("Fail to Robot Disconnect!")
+
+
+
+
 # def Vision_Work():
 #    # 비전 데이터 받아서 움직임(비젼 데이터를 받는 명령어,비젼 데이터를 통해 움직이는 명령어, 위치 도작했다는 신호 받음)
 #    vs_set_info(DR_VS_CUSTOM)              # 비젼 종류 설정

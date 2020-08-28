@@ -33,52 +33,59 @@ Global_t_chademo6 = 0
 
 
 def server_socket_open(a):
-    return a
+  return a
 
 def server_socket_read(a, length=-1, timeout=-1):
-    b = a
-    return a, b
+  b = a
+  return a, b
 
 def server_socket_write(a, b):
-    pass
+  pass
 
 def server_socket_state(a):
-    return a
+  return a
 
 def server_socket_close(a):
-    return a
+  return a
 
 def get_current_posx(ref=-1):
-    a = 1
-    b = 2
-    return a, b
+  a = 1
+  b = 2
+  return a, b
 
 def posx(a):
-    return a
+  return a
 
 def thread_run(a, loop=True):
-    return a
+  return a
 
 def set_tool_digital_output(a, b):
-    a = b
+  a = b
 
 def get_tool_digital_input(a):
-    return a
+  return a
+
+def wait_tool_digital_input(a, b, time=3):
+  b = ON or OFF
+  return a, b
 
 def stop(a):
-    pass
+  pass
 
 def movel(a, time=5):
-    pass
+  pass
+
+def movej(a, time=5):
+  pass
 
 def sub_program_run(a):
-    pass
+  pass
 
 def exit():
-    pass
+  pass
 
 def set_tool(normal):
-    pass
+  pass
 
 def wait(a):
-    pass
+  pass
